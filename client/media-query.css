@@ -1,0 +1,81 @@
+/* mouse, touch pad */
+@media (pointer: fine) and (hover: hover) {
+  .app-header .wrapper-title::after {
+    content: '💻 Desktop';
+  }
+}
+
+/* smartphones, touchscreens */
+@media (pointer: coarse) and (hover: none) {
+  .app-header .wrapper-title::after {
+    content: '📱 Mobie';
+  }
+}
+
+/* stylus-based screens */
+@media (pointer: fine) and (hover: none) {
+  .app-header .wrapper-title::after {
+    content: 'Stylus';
+  }
+}
+
+/* Nintendo Wii controller, Microsoft Kinect */
+@media (pointer: coarse) and (hover: hover) {
+  .app-header .wrapper-title::after {
+    content: 'Nintendo Wii';
+  }
+}
+
+/* pointer & hover */
+@media (pointer: none) {
+  .app-content .wrapper-pointer::after {
+    content: 'none';
+  }
+}
+@media (pointer: fine) {
+  .app-content .wrapper-pointer::after {
+    content: 'fine';
+  }
+}
+@media (pointer: coarse) {
+  .app-content .wrapper-pointer::after {
+    content: 'coarse';
+  }
+}
+@media (hover: none) {
+  .app-content .wrapper-hover::after {
+    content: 'none';
+  }
+}
+@media (hover: hover) {
+  .app-content .wrapper-hover::after {
+    content: 'hover';
+  }
+}
+
+/* any-pointer & any-pointer */
+@media (any-pointer: none) {
+  .app-content .wrapper-any-pointer::after {
+    content: 'none';
+  }
+}
+@media (any-pointer: fine) {
+  .app-content .wrapper-any-pointer::after {
+    content: 'fine';
+  }
+}
+@media (any-pointer: coarse) {
+  .app-content .wrapper-any-pointer::after {
+    content: 'coarse';
+  }
+}
+@media (any-hover: none) {
+  .app-content .wrapper-any-hover::after {
+    content: 'none';
+  }
+}
+@media (any-hover: hover) {
+  .app-content .wrapper-any-hover::after {
+    content: 'hover';
+  }
+}
