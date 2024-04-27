@@ -6,6 +6,7 @@ import { section5 } from './components/visibilitychange.js';
 import { section6 } from './components/visualViewport.js';
 import { section7 } from './components/notification.js';
 import { section8 } from './components/push.js';
+import { section9 } from './components/permission.js';
 
 const appMain = document.querySelector('.app-main');
 const navButtons = document.querySelectorAll('.nav');
@@ -18,6 +19,7 @@ const HTMLTemplates = {
   section6,
   section7,
   section8,
+  section9,
 };
 
 window.addEventListener('load', () => {
@@ -27,10 +29,10 @@ window.addEventListener('load', () => {
 });
 
 navButtons.forEach((button) => {
-  button.addEventListener('click', () => {
+  button.addEventListener('click', async () => {
     selectedButtonEffect(button);
     const section = button.dataset.id;
-    appMain.innerHTML = HTMLTemplates[section]();
+    appMain.innerHTML = await HTMLTemplates[section]();
     if (section !== 'section4') abortController?.abort();
   });
 });

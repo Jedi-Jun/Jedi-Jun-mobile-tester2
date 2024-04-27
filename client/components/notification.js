@@ -1,37 +1,43 @@
 /* 7) new Notification */
 const section7 = () => {
-  const onClick = () => {
-    Notification.requestPermission().then(perm => {
-      const options = {
-        body: `New message arrived! [${new Date().getMilliseconds()}]`,
-        data: { title: 'chatApp' },
-        // icon: 'nasa.svg',
-        icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/NASA_logo.svg/1200px-NASA_logo.svg.png',
-        tag: 'dm',
-      };
-      const notification = new Notification('Cocoa Talk', options);
-      console.log(perm);
-      console.log(notification);
-
-      if (perm === 'granted') {
-        notification.addEventListener('click', e => console.log(e));
-      } else if (perm === 'denied') {
-        notification.addEventListener('error', e => console.log(e));
-      } else {
-        // 'default'
-      }
-    });
-  };
   setTimeout(() => {
     const notiButton = document.querySelector('#noti-button-js');
-    notiButton.addEventListener('click', onClick);
-  }, 100);
+    const notiPerm = document.querySelector('.noti-perm');
+    notiPerm.innerText = Notification.permission;
+    navigator.permissions.query({ name: 'notifications' }).then((perm) => {
+      // notiPerm.innerText = perm.state;
+      perm.onchange = () => (notiPerm.innerText = perm.state);
+    });
+    notiButton.addEventListener('click', notifyMe);
+  }, 0);
+
   return `
     <div>
       new Notification!
       <button id="noti-button-js">Click</button>
+      <h6>Notification.permission: <span class="noti-perm"></span></h6>
     </div>
     `;
 };
+
+function notifyMe() {
+  if (!('Notification' in window)) {
+    alert('Notification is not supported.');
+    // ...
+  } else if (Notification.permission === 'granted') {
+    const notification = new Notification('New Message!-1');
+    // ...
+  } else if (Notification.permission !== 'denied') {
+    alert('Request permission now');
+    Notification.requestPermission().then((permission) => {
+      if (permission === 'granted') {
+        alert('Now permission has been granted!');
+        const notification = new Notification('New Message!-2');
+      }
+    });
+  } else {
+    alert('Notification: denied');
+  }
+}
 
 export { section7 };

@@ -5,7 +5,7 @@ const cors = require('cors');
 const { setVapidDetails, sendNotification, generateVAPIDKeys } = require('web-push');
 
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4010;
 // VAPID keys should be generated only once.
 // const vapidKeys = generateVAPIDKeys();
 // console.log(vapidKeys.publicKey, vapidKeys.privateKey);

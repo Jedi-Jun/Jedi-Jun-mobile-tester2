@@ -1,49 +1,5 @@
 /* 8) Push message */
 const section8 = () => {
-  const onClick = () => {
-    const VAPID_PUBLIC_KEY =
-      'BJXGncHzL9SJTyOJZ4tlKbIdQvdu-4CnM0QuNuEijHKpkY5zm_xLne3GzszaGfDbmr4ixBCMZXbNJXDjN55GUXI';
-
-    if ('serviceWorker' in navigator) {
-      // 1) Register Service Worker
-      console.log('Registering SW...');
-      navigator.serviceWorker.register('sw.js', {
-        // scope: '/',
-        scope: '/client/',
-      });
-      console.log('SW registered successful.');
-
-      handlePushMessage();
-    }
-
-    function handlePushMessage() {
-      // 2) Register Push
-      navigator.serviceWorker.ready.then(async registration => {
-        console.log('Registering Push...');
-        const subscribeOptions = {
-          userVisibleOnly: true,
-          applicationServerKey: VAPID_PUBLIC_KEY,
-        };
-        const subscription = await registration.pushManager.subscribe(
-          subscribeOptions
-        );
-        console.log('Push registered successful.');
-
-        // 3) Send Push Notification
-        console.log('Push Notification Sending...');
-        await fetch('http://localhost:4000/subscribe', {
-          // await fetch('https://app.dongrim.site/subscribe', {
-          method: 'POST',
-          body: JSON.stringify(subscription),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-      });
-      console.log('Push Notification Sent successfully!');
-    }
-  };
-
   setTimeout(() => {
     const pushButton = document.querySelector('#push-button-js');
     const pushSW = document.querySelector('.push-sw');
@@ -51,19 +7,17 @@ const section8 = () => {
     const pushPerm = document.querySelector('.push-perm');
     const permButton = document.querySelector('#perm-button-js');
 
-    pushButton.addEventListener('click', onClick);
+    pushButton.addEventListener('click', pushMessage);
     pushSW.innerText = String('serviceWorker' in navigator);
     pushPM.innerText = String('PushManager' in window);
-    permButton.addEventListener('click', async () => {
-      await Notification.requestPermission();
-    });
+    permButton.addEventListener('click', requestPermission);
 
-    // console.log(Notification.permission);
-    navigator.permissions.query({ name: 'notifications' }).then(perm => {
-      pushPerm.innerText = perm.state;
+    console.log('Notification permission:', Notification.permission);
+    navigator.permissions.query({ name: 'notifications' }).then((perm) => {
+      pushPerm.innerText = perm.state; // prompt, granted, denied
       perm.onchange = () => (pushPerm.innerText = perm.state);
     });
-  }, 50);
+  }, 100);
 
   return `
     <div class="push-wrapper">
@@ -76,6 +30,56 @@ const section8 = () => {
       </div>
     </div>
     `;
+};
+
+// 1) Request permission of Notification
+const requestPermission = () => {
+  Notification.requestPermission().then((perm) => {
+    console.log(`Permission: ${perm}`); // default, granted, denied
+  });
+};
+
+// 2) Send Push Message
+const pushMessage = () => {
+  const VAPID_PUBLIC_KEY =
+    'BJXGncHzL9SJTyOJZ4tlKbIdQvdu-4CnM0QuNuEijHKpkY5zm_xLne3GzszaGfDbmr4ixBCMZXbNJXDjN55GUXI';
+
+  if ('serviceWorker' in navigator) {
+    // 1) Register Service Worker
+    console.log('Registering SW...');
+    navigator.serviceWorker.register('sw.js', {
+      // scope: '/',
+      scope: '/client/',
+    });
+    console.log('SW registered successful.');
+
+    handlePushMessage();
+  }
+
+  function handlePushMessage() {
+    // 2) Register Push
+    navigator.serviceWorker.ready.then(async (registration) => {
+      console.log('Registering Push...');
+      const subscribeOptions = {
+        userVisibleOnly: true,
+        applicationServerKey: VAPID_PUBLIC_KEY,
+      };
+      const subscription = await registration.pushManager.subscribe(subscribeOptions);
+      console.log('Push registered successful.');
+
+      // 3) Send Push Notification
+      console.log('Push Notification Sending...');
+      await fetch('http://localhost:4000/subscribe', {
+        // await fetch('https://app.dongrim.site/subscribe', {
+        method: 'POST',
+        body: JSON.stringify(subscription),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    });
+    console.log('Push Notification Sent successfully!');
+  }
 };
 
 export { section8 };
