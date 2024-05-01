@@ -36,7 +36,15 @@ const onClick = () => {
     // console.log(Notification.permission); // default, granted, denied
     // console.log(notification);
 
-    notification.onclick = function () {
+    notification.onshow = function () {
+      console.log('noti-onshow');
+      /* setTimeout(function () {
+        console.log('5초 후 알림 자동 닫힘');
+        notification.close();
+      }, 5000); */
+    };
+
+    notification.onclick = () => {
       console.log('noti-onclick');
       // window.open('https://www.example.com/messages', '_blank');
     };
@@ -47,14 +55,6 @@ const onClick = () => {
 
     notification.onerror = function () {
       console.log('noti-onerror');
-    };
-
-    notification.onshow = function () {
-      console.log('noti-onshow');
-      /* setTimeout(function () {
-        console.log('5초 후 알림 자동 닫힘');
-        notification.close();
-      }, 5000); */
     };
   });
 };

@@ -23,30 +23,41 @@ app.get('/', (req, res) => {
   res.status(200).end('ok');
 });
 
-let dummy = {};
+const pushStore = {};
 app.post('/subscribe', (req, res) => {
   const subscription = req.body;
   const payload = JSON.stringify({ title: 'Test-title' });
 
   sendNotification(subscription, payload).catch((err) => console.error(err));
 
-  dummy.subscription = subscription;
-  dummy.payload = payload;
+  pushStore.subscription = subscription;
+  pushStore.payload = payload;
+  console.log('subscription: ', subscription);
 
   res.status(201).end();
 });
 
 app.get('/push', (req, res) => {
-  if (!req.query)
-    return res.status(204).send('Query string is ommitted. (/?title=foo&desc=baz)');
-  const newPayload = JSON.stringify({ ...req.query });
+  const queries = req.query;
+  if (Object.keys(queries).length === 0) {
+    return res.send(`
+      <h3>Query string is ommitted.</h3>
+      <span>(e.g. <code>/?title=foo&desc=baz</code>)</span>
+      `);
+  }
 
-  if (dummy.subscription) {
-    sendNotification(dummy.subscription, newPayload).catch((err) => console.error(err));
-    res.status(200).json({ ...dummy, newPayload });
+  const newPayload = JSON.stringify({ ...queries });
+  // Object: { id: '10', title: '20' }
+  // JSON.stringify: {"id":"10","title":"20"}
+
+  if (pushStore.subscription) {
+    sendNotification(pushStore.subscription, newPayload).catch((err) =>
+      console.error(err)
+    );
+    res.status(200).json({ ...pushStore, newPayload });
   } else {
     // res.setHeader('Content-Type', 'text/html');
-    res.status(204).send('No subscription data.');
+    res.send('<h3>No subscription data.</h3>');
   }
 });
 

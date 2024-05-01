@@ -45,41 +45,41 @@ const pushMessage = () => {
     'BJXGncHzL9SJTyOJZ4tlKbIdQvdu-4CnM0QuNuEijHKpkY5zm_xLne3GzszaGfDbmr4ixBCMZXbNJXDjN55GUXI';
 
   if ('serviceWorker' in navigator) {
-    // 1) Register Service Worker
-    console.log('Registering SW...');
+    // 1) Register ServiceWorker
+    console.log('1) Registering sw.js');
     navigator.serviceWorker.register('sw.js', {
       // scope: '/',
       scope: '/client/',
     });
-    console.log('SW registered successful.');
-
-    handlePushMessage();
   }
 
-  function handlePushMessage() {
-    // 2) Register Push
-    navigator.serviceWorker.ready.then(async (registration) => {
-      console.log('Registering Push...');
-      const subscribeOptions = {
-        userVisibleOnly: true,
-        applicationServerKey: VAPID_PUBLIC_KEY,
-      };
-      const subscription = await registration.pushManager.subscribe(subscribeOptions);
-      console.log('Push registered successful.');
+  // 2) Subscribe Push Notification
+  navigator.serviceWorker.ready.then(async (registration) => {
+    console.log('2) ServiceWorker is ready');
+    const subscribeOptions = {
+      userVisibleOnly: true,
+      applicationServerKey: VAPID_PUBLIC_KEY,
+    };
 
-      // 3) Send Push Notification
-      console.log('Push Notification Sending...');
-      await fetch('http://localhost:4000/subscribe', {
-        // await fetch('https://app.dongrim.site/subscribe', {
-        method: 'POST',
-        body: JSON.stringify(subscription),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+    // 3) Request permission of Notification
+    const subscription = await registration.pushManager.subscribe(subscribeOptions);
+    // registration.showNotification('Vibration Sample');
+    // console.log(subscription);
+
+    console.log('3) Subscription is made by pushManager');
+
+    // 4) Send a subscription to the server
+    console.log('4) Send a subscription to the server');
+    fetch('http://localhost:4010/subscribe', {
+      // await fetch('https://app.dongrim.site/subscribe', {
+      method: 'POST',
+      body: JSON.stringify(subscription),
+      // credentials: 'include', // include, same-origin, omit
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
-    console.log('Push Notification Sent successfully!');
-  }
+  });
 };
 
 export { section8 };
