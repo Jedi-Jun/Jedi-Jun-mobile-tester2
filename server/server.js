@@ -19,25 +19,43 @@ setVapidDetails(
   process.env.VAPID_PRIVATE_KEY
 );
 
+const registerDB = {};
+
 app.get('/', (req, res) => {
-  res.status(200).end('ok');
+  res.status(200).json({ registerDB });
 });
 
-const pushStore = {};
 app.post('/subscribe', (req, res) => {
   const subscription = req.body;
-  const payload = JSON.stringify({ title: 'Test-title' });
-
-  sendNotification(subscription, payload).catch((err) => console.error(err));
-
-  pushStore.subscription = subscription;
-  pushStore.payload = payload;
-  console.log('subscription: ', subscription);
-
-  res.status(201).end();
+  registerDB.subscription = subscription;
+  // const payload = JSON.stringify({ title: 'Test-title' });
+  // sendNotification(subscription, payload).catch((err) => console.error(err));
+  // registerDB.payload = payload;
+  res.status(201).json({
+    status: 201,
+    subscription,
+    message: 'Subscription has been registered successfully.',
+  });
 });
 
 app.get('/push', (req, res) => {
+  // const queries = req.query;
+  const queries = {
+    title: 'Title',
+    desc: `Description (${Math.random().toFixed(2)})`,
+  };
+
+  const payload = JSON.stringify({ ...queries });
+
+  if (registerDB.subscription) {
+    sendNotification(registerDB.subscription, payload).catch((err) => console.error(err));
+    res.status(200).json({ registerDB, payload });
+  } else {
+    res.send('<h3>No subscription data.</h3>');
+  }
+});
+
+app.get('/manual', (req, res) => {
   const queries = req.query;
   if (Object.keys(queries).length === 0) {
     return res.send(`
@@ -50,11 +68,11 @@ app.get('/push', (req, res) => {
   // Object: { id: '10', title: '20' }
   // JSON.stringify: {"id":"10","title":"20"}
 
-  if (pushStore.subscription) {
-    sendNotification(pushStore.subscription, newPayload).catch((err) =>
+  if (registerDB.subscription) {
+    sendNotification(registerDB.subscription, newPayload).catch((err) =>
       console.error(err)
     );
-    res.status(200).json({ ...pushStore, newPayload });
+    res.status(200).json({ ...registerDB, newPayload });
   } else {
     // res.setHeader('Content-Type', 'text/html');
     res.send('<h3>No subscription data.</h3>');

@@ -5,9 +5,14 @@ self.addEventListener('push', (event) => {
   event.waitUntil(
     self.registration.showNotification(data.title, {
       body: data.desc || `Test-body(${Math.random().toFixed(2)})`,
-      icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/NASA_logo.svg/1200px-NASA_logo.svg.png',
+      // icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/NASA_logo.svg/1200px-NASA_logo.svg.png',
+      icon: 'nasa.svg',
+      badge: 'cocoa2.svg',
+      tag: 'dm',
+      // image
+      // actions
+      // renotify
       // vibrate: [200, 100, 200, 100, 200, 100, 200],
-      // tag: 'dm',
     })
   );
   console.log('Push Notification received.', data);
@@ -59,7 +64,7 @@ self.addEventListener('install', (event) => {
   console.log('installed');
 
   // 제어중인 서비스 워커가 존재해도 대기 상태를 건너뛴다
-  // self.skipWaiting();
+  self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {

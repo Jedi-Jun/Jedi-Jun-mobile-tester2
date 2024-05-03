@@ -187,6 +187,22 @@ hr {
   margin-bottom: 0.5rem;
   padding: 1.2rem;
 }
+.push-header-regi {
+  display: flex;
+  font-size: 0.95rem;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 0.35rem;
+  line-height: 110%;
+  margin-top: 0.2rem;
+}
+.push-header-regi .regi-sign {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background-color: gray;
+  visibility: hidden;
+}
 
 /* Permissions */
 .perm-wrapper {
