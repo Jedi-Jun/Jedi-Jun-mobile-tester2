@@ -1,30 +1,36 @@
 const appMain = document.querySelector('.app-main');
 
 /* 6) window.visualViewport & innerHeight */
-const section6 = () => `
-<div class='visual-wrapper'>
-  <div class='visual-header'>
-    header
-  </div>
-  <div class='visual-content'>
-    <div class='visual-content-innerHeight'>
-      <div>
-        <span>window.innerHeight</span>
-        <code>window\n.addEventListener\n('resize', cb);</code>
+const section6 = () => {
+  const templateHTML = `
+    <div class='visual-wrapper'>
+      <div class='visual-header'>
+        HEADER
       </div>
-      <p></p>
+      <div class='visual-content'>
+        <div class='visual-content-innerHeight'>
+          <div>
+            <span>window.innerHeight</span>
+            <code>window\n.addEventListener\n('resize', cb);</code>
+          </div>
+          <p></p>
+          </div>
+          <div class='visual-content-visualViewport'>
+          <div>
+            <span>window.visualViewport.height</span>
+            <code>window.visualViewport\n.addEventListener\n('resize', cb);</code>
+          </div>
+          <p></p>
+        </div>
       </div>
-      <div class='visual-content-visualViewport'>
-      <div>
-        <span>window.visualViewport.height</span>
-        <code>window.visualViewport\n.addEventListener\n('resize', cb);</code>
-      </div>
-      <p></p>
+      <input />
     </div>
-  </div>
-  <input />
-</div>
-`;
+    `;
+
+  const main = () => {};
+
+  return { templateHTML, main };
+};
 
 // Get visualViewport & innerHeight by resize
 window.addEventListener('resize', innerHeight);

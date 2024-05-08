@@ -63,8 +63,8 @@ button {
 
 /* Navigator */
 .navigator-wrapper {
+  max-height: 75vh;
   padding: 0 0.5rem;
-  height: 75vh;
   overflow-y: auto;
 }
 .navigator-title-wrapper {
@@ -75,13 +75,29 @@ button {
   all: unset;
   transform: scale(0.78);
 }
-.navigator-list-wrapper {
+.navigator-list {
   width: 100%;
   font-weight: normal;
   font-size: 1.125rem;
 }
-.navigator-list-wrapper li {
+.navigator-list li {
   margin-bottom: 0.5rem;
+}
+
+/* IP */
+.ip-wrapper {
+  width: 100%;
+  height: 75vh;
+  padding: 0 0.5rem;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.ip-list li {
+  font-size: 1.125rem;
+  margin-bottom: 5px;
 }
 
 /* Geolocation */
@@ -175,6 +191,11 @@ hr {
   background-color: lightgray;
 }
 
+/* notification */
+.notification-wrapper h6 {
+  margin-top: 0.5rem;
+}
+
 /* push */
 .push-wrapper {
   width: 100%;
@@ -232,6 +253,12 @@ hr {
 .perm.prompt,
 .perm.default {
   color: gold;
+}
+
+/* PWA */
+.useragent-highlight {
+  color: #19ff00;
+  background-color: rgba(60, 255, 0, 0.3);
 }
 
 /* Footer */

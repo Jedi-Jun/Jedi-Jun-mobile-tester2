@@ -2,8 +2,7 @@ const appMain = document.querySelector('.app-main');
 
 /* 1) Home */
 const section1 = () => {
-  setTimeout(getGeoLocation, 0);
-  return `
+  const templateHTML = `
     <h1><a href="https://ipinfo.io">Dongrim</a></h1>
     <table class="geo-wrapper">
       <tr>
@@ -17,6 +16,12 @@ const section1 = () => {
     </table>
     <h6 class="geo-perm">geolocation permission: </h6>
   `;
+
+  const main = () => {
+    getGeoLocation();
+  };
+
+  return { templateHTML, main };
 };
 
 const getGeoLocation = () => {
@@ -45,10 +50,5 @@ const getGeoLocation = () => {
     };
   });
 };
-
-window.addEventListener('load', () => {
-  // Initial load `Home` template with Geo values
-  appMain.innerHTML = section1();
-});
 
 export { section1 };

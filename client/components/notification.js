@@ -1,6 +1,14 @@
 /* 7) new Notification */
 const section7 = () => {
-  setTimeout(() => {
+  const templateHTML = `
+    <div class='notification-wrapper'>
+      new Notification!
+      <button id="noti-button-js">Click</button>
+      <h6>Notification.permission: <span class="noti-perm"></span></h6>
+    </div>
+    `;
+
+  const main = () => {
     const notiButton = document.querySelector('#noti-button-js');
     const notiPerm = document.querySelector('.noti-perm');
     notiPerm.innerText = Notification.permission; // statically
@@ -9,15 +17,9 @@ const section7 = () => {
       perm.onchange = () => (notiPerm.innerText = perm.state); // dynamically
     });
     notiButton.addEventListener('click', notifyMe);
-  }, 0);
+  };
 
-  return `
-    <div>
-      new Notification!
-      <button id="noti-button-js">Click</button>
-      <h6>Notification.permission: <span class="noti-perm"></span></h6>
-    </div>
-    `;
+  return { templateHTML, main };
 };
 
 function notifyMe() {

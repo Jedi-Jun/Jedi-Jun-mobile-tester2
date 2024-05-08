@@ -1,17 +1,29 @@
-const appMain = document.querySelector('.app-main');
+/* 4) IP address */
 let abortController = null;
 
-/* 4) IP address */
 const section4 = (data = null) => {
-  if (!data) {
+  /* if (!data) {
     getIpInfo();
-    return `<div>Loading...</div>`;
+    return `<div class='ip-wrapper'>Loading...</div>`;
   } else {
-    return `<ol class='navigator-wrapper'>${data}</ol>`;
-  }
+    return `<ol class='ip-wrapper'>${data}</ol>`;
+  } */
+
+  const templateHTML = `
+    <div class='ip-wrapper'>
+      <ol class='ip-list' id='ip-list-js'></ol>
+    </div>
+  `;
+
+  const main = () => {
+    const ipListElement = document.querySelector('#ip-list-js');
+    getIpInfo(ipListElement);
+  };
+
+  return { templateHTML, main };
 };
 
-const getIpInfo = async () => {
+const getIpInfo = async (ipListElement) => {
   const URL = 'https://home.dongrim.site/api/v1/ip';
 
   abortController = new AbortController();
@@ -20,9 +32,14 @@ const getIpInfo = async () => {
   fetch(URL, { signal })
     .then((res) => res.json())
     .then((data) => {
-      const result = createList(data);
-      appMain.innerHTML = section4(result);
-    }); // .catch(err => console.log(err));
+      const listHTML = createList(data);
+      ipListElement.innerHTML = listHTML;
+    })
+    .catch((err) => {
+      console.error(err);
+      alert(err.message);
+      document.querySelector('button[data-id=section1]').click();
+    });
 };
 
 const createList = (data) => {

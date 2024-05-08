@@ -2,39 +2,7 @@
 let onChangeRegiColor;
 
 const section8 = () => {
-  setTimeout(() => {
-    const regiSign = document.querySelector('.regi-sign');
-    const getRegiButton = document.querySelector('#getregi-button-js');
-    const regiButton = document.querySelector('#rigi-button-js');
-    const unRegiButton = document.querySelector('#unregi-button-js');
-    const pushButton = document.querySelector('#push-button-js');
-    const pushSW = document.querySelector('.push-sw');
-    const pushPM = document.querySelector('.push-pm');
-    const pushPerm = document.querySelector('.push-perm');
-    const permButton = document.querySelector('#perm-button-js');
-
-    getRegiButton.addEventListener('click', getRegistration);
-    regiButton.addEventListener('click', register);
-    unRegiButton.addEventListener('click', unRegister);
-    pushButton.addEventListener('click', pushMessage);
-    pushSW.innerText = String('serviceWorker' in navigator);
-    pushPM.innerText = String('PushManager' in window);
-    permButton.addEventListener('click', requestPermission);
-
-    onChangeRegiColor = (registration) => {
-      regiSign.style.backgroundColor = registration ? 'chartreuse' : 'orangered';
-      regiSign.style.visibility = 'visible';
-    };
-    navigator.serviceWorker
-      .getRegistration()
-      .then((registration) => onChangeRegiColor(registration));
-    navigator.permissions.query({ name: 'notifications' }).then((perm) => {
-      pushPerm.innerText = perm.state; // prompt, granted, denied
-      perm.onchange = () => (pushPerm.innerText = perm.state);
-    });
-  }, 100);
-
-  return `
+  const templateHTML = `
     <div class="push-wrapper">
       <div class="push-header-wrapper">
         <div>Push Message</div>
@@ -57,20 +25,59 @@ const section8 = () => {
       </div>
     </div>
     `;
+
+  const main = () => {
+    const regiSign = document.querySelector('.regi-sign');
+    const getRegiButton = document.querySelector('#getregi-button-js');
+    const regiButton = document.querySelector('#rigi-button-js');
+    const unRegiButton = document.querySelector('#unregi-button-js');
+    const pushButton = document.querySelector('#push-button-js');
+    const pushSW = document.querySelector('.push-sw');
+    const pushPM = document.querySelector('.push-pm');
+    const pushPerm = document.querySelector('.push-perm');
+    const permButton = document.querySelector('#perm-button-js');
+
+    getRegiButton.addEventListener('click', getRegistration);
+    regiButton.addEventListener('click', register);
+    // unRegiButton.addEventListener('click', unRegister);
+    unRegiButton.addEventListener('click', unSubscribe);
+    pushButton.addEventListener('click', pushMessage);
+    pushSW.innerText = String('serviceWorker' in navigator);
+    pushPM.innerText = String('PushManager' in window);
+    permButton.addEventListener('click', requestPermission);
+
+    onChangeRegiColor = (registration) => {
+      regiSign.style.backgroundColor = registration ? 'chartreuse' : 'orangered';
+      regiSign.style.visibility = 'visible';
+    };
+    navigator.serviceWorker
+      .getRegistration()
+      .then((registration) => onChangeRegiColor(registration));
+
+    navigator.permissions.query({ name: 'notifications' }).then((perm) => {
+      pushPerm.innerText = perm.state; // prompt, granted, denied
+      perm.onchange = () => (pushPerm.innerText = perm.state);
+    });
+  };
+
+  return { templateHTML, main };
 };
 
 // 1) Get Registration
 const getRegistration = async () => {
-  const registration = await navigator.serviceWorker.getRegistration();
-  if (registration) {
-    const _registration = {};
-    for (const key in registration) {
-      _registration[key] = registration[key];
+  if ('serviceWorker' in navigator) {
+    const registration = await navigator.serviceWorker.getRegistration();
+    if (registration) {
+      const _registration = {};
+      for (const key in registration) {
+        _registration[key] = registration[key];
+      }
+      alert(JSON.stringify(_registration, null, 2));
+    } else {
+      alert('Registration is not found');
     }
-    alert(JSON.stringify(_registration, null, 2));
-    console.log(registration);
   } else {
-    alert('Registration is not found');
+    alert('ServiceWorker is not supported');
   }
 };
 
@@ -87,7 +94,10 @@ const register = async () => {
         // scope: '/',
         scope: '/client/',
       })
-      .then((registration) => onChangeRegiColor(registration));
+      .then((registration) => onChangeRegiColor(registration))
+      .catch((err) => {
+        console.error('ServiceWorker registration failed:', err);
+      });
   }
 
   // 2-2) Subscribe Push Notification
@@ -121,7 +131,29 @@ const register = async () => {
   });
 };
 
-// 3) Unregister
+// 3) Unsubscribe => https only
+const unSubscribe = async () => {
+  const registration = await navigator.serviceWorker.getRegistration();
+  if (registration) {
+    if ('unsubscribe' in registration) {
+      registration
+        .unsubscribe()
+        .then((successful) => {
+          console.log('unsubscribe: ', successful);
+          // onChangeRegiColor(!boolean);
+        })
+        .catch((err) => {
+          console.error('ServiceWorker unsubscribe failed:', err);
+        });
+    } else {
+      alert('registration.unsubscribe() is working with HTTPS only');
+    }
+  } else {
+    alert('Registration is not found');
+  }
+};
+
+// 3) Unregister(X) => deprecated
 const unRegister = async () => {
   const registration = await navigator.serviceWorker.getRegistration();
   if (registration) {
@@ -134,8 +166,13 @@ const unRegister = async () => {
 };
 
 // 4) Push a message
-const pushMessage = () => {
-  fetch('http://localhost:4010/push');
+const pushMessage = async () => {
+  const res = await fetch('http://localhost:4010/push');
+  if (!res.ok) {
+    const data = await res.json();
+    const errorMessage = data.message;
+    alert(errorMessage);
+  }
 };
 
 // 5) Request permission of Notification

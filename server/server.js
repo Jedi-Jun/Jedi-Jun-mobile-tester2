@@ -51,7 +51,7 @@ app.get('/push', (req, res) => {
     sendNotification(registerDB.subscription, payload).catch((err) => console.error(err));
     res.status(200).json({ registerDB, payload });
   } else {
-    res.send('<h3>No subscription data.</h3>');
+    res.status(404).json({ message: 'No subscription data' });
   }
 });
 

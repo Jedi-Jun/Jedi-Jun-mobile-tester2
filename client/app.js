@@ -7,6 +7,7 @@ import { section6 } from './components/visualViewport.js';
 import { section7 } from './components/notification.js';
 import { section8 } from './components/push.js';
 import { section9 } from './components/permission.js';
+import { section10 } from './components/pwa.js';
 
 const appMain = document.querySelector('.app-main');
 const navButtons = document.querySelectorAll('.nav');
@@ -20,6 +21,7 @@ const HTMLTemplates = {
   section7,
   section8,
   section9,
+  section10,
 };
 
 window.addEventListener('load', () => {
@@ -29,10 +31,12 @@ window.addEventListener('load', () => {
 });
 
 navButtons.forEach((button) => {
-  button.addEventListener('click', async () => {
+  button.addEventListener('click', () => {
     selectedButtonEffect(button);
     const section = button.dataset.id;
-    appMain.innerHTML = await HTMLTemplates[section]();
+    const { templateHTML, main } = HTMLTemplates[section]();
+    appMain.innerHTML = templateHTML;
+    main();
     if (section !== 'section4') abortController?.abort();
   });
 });
@@ -41,3 +45,10 @@ function selectedButtonEffect(target) {
   navButtons.forEach((btn) => (btn.style.textShadow = 'none'));
   target.style.textShadow = '1px 0px 0px black';
 }
+
+window.addEventListener('load', () => {
+  // Initial load `Home` template with Geo values
+  const { templateHTML, main } = section1();
+  appMain.innerHTML = templateHTML;
+  main();
+});

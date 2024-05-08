@@ -6,8 +6,8 @@ self.addEventListener('push', (event) => {
     self.registration.showNotification(data.title, {
       body: data.desc || `Test-body(${Math.random().toFixed(2)})`,
       // icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/NASA_logo.svg/1200px-NASA_logo.svg.png',
-      icon: 'nasa.svg',
-      badge: 'cocoa2.svg',
+      icon: './images/noti-icons/nasa.svg',
+      badge: './images/noti-icons/cocoa2.svg',
       tag: 'dm',
       // image
       // actions
@@ -28,13 +28,13 @@ self.addEventListener('notificationclick', (event) => {
         type: 'window',
         includeUncontrolled: true,
       });
-      // console.log(allClients);
 
       let targetClient;
       for (const client of allClients) {
         const url = new URL(client.url);
         // if (url.hostname === 'test.dongrim.site') {
-        if (url.pathname === '/client/') {
+        // if (url.pathname === '/client/') {
+        if (url.pathname === '/client/index.html') {
           client.focus();
           targetClient = client;
           break;
@@ -43,7 +43,8 @@ self.addEventListener('notificationclick', (event) => {
 
       if (!targetClient) {
         // targetClient = await clients.openWindow('/');
-        targetClient = await clients.openWindow('/client/');
+        // targetClient = await clients.openWindow('/client/');
+        targetClient = await clients.openWindow('/client/index.html');
       }
 
       // Post Message
@@ -60,7 +61,6 @@ self.addEventListener('notificationclick', (event) => {
 });
 
 self.addEventListener('install', (event) => {
-  // service worker is installed.
   console.log('installed');
 
   // 제어중인 서비스 워커가 존재해도 대기 상태를 건너뛴다
@@ -68,17 +68,16 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
-  // service worker is activated
   console.log('activated');
 
   // 새로고침 없어도 활성화 즉시 클라이언트를 제어한다
   // self.clients.clamin();
 });
 
-/* self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', (event) => {
   // service worker intercepted a fetch call
   // console.log('intercepted a http request', event.request);
-}); */
+});
 
 self.addEventListener('message', (event) => {
   // message from webpage

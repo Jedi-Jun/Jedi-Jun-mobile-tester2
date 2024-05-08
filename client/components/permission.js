@@ -1,14 +1,18 @@
-const section9 = async () => {
-  const permissionList = await getPermissions();
-  return `
+const section9 = () => {
+  const templateHTML = `
     <h4>Permissions</h4>
-    <table class="perm-wrapper">
-      ${permissionList}
-    </table>
+    <table class="perm-wrapper" id='perm-list-js'></table>
   `;
+
+  const main = () => {
+    const permListElement = document.querySelector('#perm-list-js');
+    getPermissions(permListElement);
+  };
+
+  return { templateHTML, main };
 };
 
-const getPermissions = async () => {
+const getPermissions = async (permListElement) => {
   const permissions = [
     'geolocation',
     'notifications',
@@ -60,7 +64,7 @@ const getPermissions = async () => {
     }
   }
 
-  return HTMLString;
+  permListElement.innerHTML = HTMLString;
 };
 
 export { section9 };

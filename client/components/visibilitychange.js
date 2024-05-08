@@ -1,10 +1,17 @@
 /* 5) visibilitychange + focus + blur */
-const section5 = () => `
-<ol class='vis-wrapper'>
-  <p>=== Start to tab! ===</p>
-  <div class='vis-bottom'></div>
-</ol>
-`;
+
+const section5 = () => {
+  const templateHTML = `
+    <ol class='vis-wrapper'>
+      <p>=== Start to tab! ===</p>
+      <div class='vis-bottom'></div>
+    </ol>
+  `;
+
+  const main = () => {};
+
+  return { templateHTML, main };
+};
 
 const events = [
   {
