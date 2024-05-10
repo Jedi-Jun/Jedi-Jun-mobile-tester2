@@ -200,13 +200,16 @@ hr {
 .push-wrapper {
   width: 100%;
   padding: 0 2.5rem;
-  text-align: center;
 }
 .push-header-wrapper,
 .push-body-wrapper {
   background-color: var(--secondary-bg-color);
   margin-bottom: 0.5rem;
   padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .push-header-regi {
   display: flex;
@@ -217,12 +220,46 @@ hr {
   line-height: 110%;
   margin-top: 0.2rem;
 }
-.push-header-regi .regi-sign {
+.push-header-regi .push-regi-sign {
   width: 13px;
   height: 13px;
   border-radius: 50%;
   background-color: gray;
   visibility: hidden;
+}
+.push-button-wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: auto;
+  grid-template-areas:
+    'b c'
+    'a a'
+    'd e';
+  grid-column-gap: 1px;
+  grid-row-gap: 1px;
+  margin-top: 0.8rem;
+  width: 75%;
+}
+.push-button-wrapper button:nth-of-type(1) {
+  grid-area: a;
+}
+.push-button-wrapper button:nth-of-type(2) {
+  grid-area: b;
+}
+.push-button-wrapper button:nth-of-type(3) {
+  grid-area: c;
+}
+.push-button-wrapper button:nth-of-type(4) {
+  grid-area: d;
+}
+.push-button-wrapper button:nth-of-type(5) {
+  grid-area: e;
+}
+.push-button-wrapper button {
+  /* all: unset; */
+  border-radius: 0px;
+  border: 1px solid gray;
+  padding: 5px;
 }
 
 /* Permissions */
@@ -256,9 +293,37 @@ hr {
 }
 
 /* PWA */
-.useragent-highlight {
+.pwa-wrapper {
+  width: 100%;
+  padding: 0 2.5rem;
+  text-align: center;
+}
+.pwa-header-wrapper,
+.pwa-body-wrapper,
+.pwa-bottom-wrapper {
+  background-color: var(--secondary-bg-color);
+  margin-bottom: 0.5rem;
+  padding: 1.2rem;
+}
+.pwa-bottom-wrapper {
+  font-size: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.pwa-bottom-wrapper input {
+  padding: 5px;
+  width: 4ch;
+}
+.pwa-wrapper .useragent-highlight {
   color: #19ff00;
   background-color: rgba(60, 255, 0, 0.3);
+}
+
+.pwa-bottom-wrapper .appBadge-reference {
+  font-size: 0.9rem;
+  font-style: italic;
 }
 
 /* Footer */

@@ -1,4 +1,5 @@
 /* 8) Push message */
+let subscription;
 let onChangeRegiColor;
 
 const section8 = () => {
@@ -8,13 +9,14 @@ const section8 = () => {
         <div>Push Message</div>
         <div class="push-header-regi">
           <span>ServiceWorker Registration</span>
-          <div class="regi-sign"></div>
+          <div class="push-regi-sign"></div>
         </div>
-        <div>
+        <div class="push-button-wrapper">
+          <button id="rigi-button-js">Register & Subscribe</button>
           <button id="getregi-button-js">Get Regi</button>
-          <button id="rigi-button-js">Register</button>
-          <button id="unregi-button-js">Unregister</button>
           <button id="push-button-js">Push</button>
+          <button id="unsub-button-js">Unsubscribe</button>
+          <button id="unregi-button-js">Unregister</button>
         </div>
       </div>
       <div class="push-body-wrapper">
@@ -27,21 +29,22 @@ const section8 = () => {
     `;
 
   const main = () => {
-    const regiSign = document.querySelector('.regi-sign');
-    const getRegiButton = document.querySelector('#getregi-button-js');
+    const regiSign = document.querySelector('.push-regi-sign');
     const regiButton = document.querySelector('#rigi-button-js');
-    const unRegiButton = document.querySelector('#unregi-button-js');
+    const getRegiButton = document.querySelector('#getregi-button-js');
     const pushButton = document.querySelector('#push-button-js');
+    const unSubButton = document.querySelector('#unsub-button-js');
+    const unRegiButton = document.querySelector('#unregi-button-js');
     const pushSW = document.querySelector('.push-sw');
     const pushPM = document.querySelector('.push-pm');
     const pushPerm = document.querySelector('.push-perm');
     const permButton = document.querySelector('#perm-button-js');
 
-    getRegiButton.addEventListener('click', getRegistration);
     regiButton.addEventListener('click', register);
-    // unRegiButton.addEventListener('click', unRegister);
-    unRegiButton.addEventListener('click', unSubscribe);
+    getRegiButton.addEventListener('click', getRegistration);
     pushButton.addEventListener('click', pushMessage);
+    unSubButton.addEventListener('click', unSubscribe);
+    unRegiButton.addEventListener('click', unRegister);
     pushSW.innerText = String('serviceWorker' in navigator);
     pushPM.innerText = String('PushManager' in window);
     permButton.addEventListener('click', requestPermission);
@@ -109,9 +112,8 @@ const register = async () => {
     };
 
     // 2-3) Request permission of Notification
-    const subscription = await registration.pushManager.subscribe(subscribeOptions);
+    subscription = await registration.pushManager.subscribe(subscribeOptions);
     // registration.showNotification('New Message');  // push a message
-    // console.log(subscription);
 
     console.log('3) Subscription is made by pushManager');
 
@@ -131,29 +133,28 @@ const register = async () => {
   });
 };
 
-// 3) Unsubscribe => https only
+// 3-1) Unsubscribe(Push)
 const unSubscribe = async () => {
-  const registration = await navigator.serviceWorker.getRegistration();
-  if (registration) {
-    if ('unsubscribe' in registration) {
-      registration
+  if (subscription) {
+    if ('unsubscribe' in subscription) {
+      subscription
         .unsubscribe()
         .then((successful) => {
-          console.log('unsubscribe: ', successful);
-          // onChangeRegiColor(!boolean);
+          // successful => true
+          onChangeRegiColor(!successful);
         })
         .catch((err) => {
           console.error('ServiceWorker unsubscribe failed:', err);
         });
     } else {
-      alert('registration.unsubscribe() is working with HTTPS only');
+      alert('PushSubscription.unsubscribe() is not supported');
     }
   } else {
-    alert('Registration is not found');
+    alert('Subscription is not found');
   }
 };
 
-// 3) Unregister(X) => deprecated
+// 3-2) Unregister(SW)
 const unRegister = async () => {
   const registration = await navigator.serviceWorker.getRegistration();
   if (registration) {

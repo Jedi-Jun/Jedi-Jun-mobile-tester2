@@ -28,9 +28,8 @@ app.get('/', (req, res) => {
 app.post('/subscribe', (req, res) => {
   const subscription = req.body;
   registerDB.subscription = subscription;
-  // const payload = JSON.stringify({ title: 'Test-title' });
-  // sendNotification(subscription, payload).catch((err) => console.error(err));
-  // registerDB.payload = payload;
+  console.log('Subscribe arrived!: ', subscription);
+
   res.status(201).json({
     status: 201,
     subscription,

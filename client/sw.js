@@ -49,10 +49,7 @@ self.addEventListener('notificationclick', (event) => {
 
       // Post Message
       // The message is received in the "message" event on navigator.serviceWorker.
-      targetClient.postMessage({
-        msg: 'PostMessage',
-        url: 'url',
-      });
+      targetClient.postMessage({ msg: 'PostMessage', url: 'url' });
       /* navigator.serviceWorker.addEventListener("message", (event) => {
         console.log(event.data.msg, event.data.url);
       }); */
