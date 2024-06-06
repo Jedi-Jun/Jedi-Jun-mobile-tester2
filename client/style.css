@@ -49,16 +49,38 @@ button {
   font-size: clamp(1.125rem, 5.75vw, 2.25rem);
 }
 
+/* Pointer */
+.app-section2 {
+  /* max-width: 220px; */
+  /* max-width: 350px; */
+  padding-left: 20vw;
+  padding-right: 20vw;
+}
 .app-header {
   text-align: center;
 }
-/* .app-content {} */
-
-.item {
+.app-header .item,
+.app-content .item {
   border: 1px solid var(--primary-border-color);
-  min-width: 180px;
   padding: 0.5rem;
   margin-bottom: 0.5rem;
+}
+.app-content-others {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.05rem;
+  word-break: break-all;
+}
+.app-content-others span:first-child {
+  margin-top: 5px;
+  margin-bottom: 3px;
+}
+.app-content-others .referrer {
+  font-size: 0.85rem;
+  line-height: 120%;
+  color: blue;
+  /* max-width: clamp(20.125rem, 5.75vw, 2.25rem); */
+  /* max-width: 200px; */
 }
 
 /* Navigator */

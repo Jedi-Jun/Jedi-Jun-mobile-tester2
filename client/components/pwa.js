@@ -1,6 +1,6 @@
 /* 9) PAW, Progressive Web Apps */
 
-let installPrompt = null;
+let deferredPrompt = null;
 
 const section10 = () => {
   const templateHTML = `
@@ -31,7 +31,7 @@ const section10 = () => {
     const appBadge = document.querySelector('#appBadge');
     const badgeSetButton = document.querySelector('#badgeSet-button-js');
 
-    installAppButton.addEventListener('click', installApp);
+    installAppButton.addEventListener('click', installWebApp);
     appBadge.addEventListener('focus', (event) => onFocusAppBadge(event, badgeSetButton));
     appBadge.addEventListener('input', (event) => onInputAppBadge(event, badgeSetButton));
     badgeSetButton.addEventListener('click', () => setBadge(appBadge));
@@ -80,19 +80,19 @@ const setBadge = (appBadge) => {
   }
 };
 
-window.addEventListener('beforeinstallprompt', (event) => {
-  event.preventDefault();
-  installPrompt = event;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
   // installButton.hidden = true;
   // installButton.removeAttribute('hidden');
 });
 
-const installApp = async () => {
-  if (!installPrompt) {
-    alert('beforeinstallprompt is not supported');
+const installWebApp = async () => {
+  if (!deferredPrompt) {
+    alert('beforeinstallprompt is NOT supported.');
   }
-  const { outcome } = await installPrompt.prompt();
-  // const { outcome } = await installPrompt.userChoice;
+  const { outcome } = await deferredPrompt.prompt();
+  // const { outcome } = await deferredPrompt.userChoice;
 };
 
 const highlightWord = (words) => {

@@ -2,19 +2,24 @@ console.log('sw.js has been loaded.');
 
 self.addEventListener('push', (event) => {
   const data = event.data.json();
-  event.waitUntil(
-    self.registration.showNotification(data.title, {
-      body: data.desc || `Test-body(${Math.random().toFixed(2)})`,
-      // icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/NASA_logo.svg/1200px-NASA_logo.svg.png',
-      icon: './images/noti-icons/nasa.svg',
-      badge: './images/noti-icons/cocoa2.svg',
-      tag: 'dm',
-      // image
-      // actions
-      // renotify
-      // vibrate: [200, 100, 200, 100, 200, 100, 200],
-    })
-  );
+
+  const title = data.title;
+  const options = {
+    body: data.desc || `Test-body(${Math.random().toFixed(2)})`,
+    // icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/NASA_logo.svg/1200px-NASA_logo.svg.png',
+    icon: './images/noti-icons/nasa.svg',
+    badge: './images/noti-icons/cocoa2.svg',
+    tag: 'dm',
+    renotify: true,
+    // image
+    // vibrate: [200, 100, 200, 100, 200, 100, 200],
+    // actions
+    // silent: true,
+  };
+
+  // if ('actions' in window.Notification?.prototype) {} else {}
+
+  event.waitUntil(self.registration.showNotification(title, options));
   console.log('Push Notification received.', data);
 });
 

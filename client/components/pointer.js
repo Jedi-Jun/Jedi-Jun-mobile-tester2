@@ -19,9 +19,18 @@ const section2 = () => {
         <span> any-hover: </span>
       </div>
     </div>
+    <div class="app-content-others">
+      <span>display-mode: <code class="display-mode"></code></span>
+      <span>document.referrer:</span>
+      <code class="referrer" id="referrer-js"></code>
+    </div>
   </div>`;
 
-  const main = () => {};
+  const main = () => {
+    const referrer = document.querySelector('#referrer-js');
+    const documentReferrer = document.referrer;
+    documentReferrer && referrer.append(`"${documentReferrer}"`);
+  };
 
   return { templateHTML, main };
 };

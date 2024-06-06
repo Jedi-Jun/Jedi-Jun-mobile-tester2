@@ -79,3 +79,35 @@
     content: 'hover';
   }
 }
+
+/* display-mode */
+@media screen and (display-mode: browser) {
+  .app-content-others .display-mode::after {
+    content: 'browser';
+  }
+}
+@media screen and (display-mode: fullscreen) {
+  .app-content-others .display-mode::after {
+    content: 'fullscreen';
+  }
+}
+@media screen and (display-mode: minimal-ui) {
+  .app-content-others .display-mode::after {
+    content: 'minimal-ui';
+  }
+}
+@media screen and (display-mode: picture-in-picture) {
+  .app-content-others .display-mode::after {
+    content: 'picture-in-picture';
+  }
+}
+@media screen and (display-mode: standalone) {
+  .app-content-others .display-mode::after {
+    content: 'standalone';
+  }
+}
+@media screen and (display-mode: window-controls-overlay) {
+  .app-content-others .display-mode::after {
+    content: 'window-controls-overlay';
+  }
+}
