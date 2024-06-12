@@ -50,7 +50,9 @@ const section8 = () => {
     permButton.addEventListener('click', requestPermission);
 
     onChangeRegiColor = (registration) => {
-      regiSign.style.backgroundColor = registration ? 'chartreuse' : 'orangered';
+      regiSign.style.backgroundColor = registration
+        ? 'chartreuse'
+        : 'orangered';
       regiSign.style.visibility = 'visible';
     };
     navigator.serviceWorker
@@ -112,7 +114,7 @@ const register = async () => {
     };
 
     // 2-3) Request permission of Notification
-    subscription = await registration.pushManager.subscribe(subscribeOptions);
+    subscription = await registration.pushManager.subscribe(subscribeOptions); // request permission
     // registration.showNotification('New Message');  // push a message
 
     console.log('3) Subscription is made by pushManager');
